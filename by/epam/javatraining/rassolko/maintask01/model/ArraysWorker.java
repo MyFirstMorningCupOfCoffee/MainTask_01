@@ -1,4 +1,4 @@
-package main;
+package by.epam.javatraining.rassolko.maintask01.model;;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
