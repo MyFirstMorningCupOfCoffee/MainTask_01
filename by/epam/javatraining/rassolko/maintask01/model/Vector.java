@@ -6,24 +6,23 @@ public class Vector
     private int length;
     private boolean isSorted;
     
+    // By default our inner storage can hold 10 elements
     Vector()
     {
-        storage = new double[10];
-        init();
+        this(10);
     }
     
     Vector(int size)
     {
         storage = new double[size];
-        init();
-    }
-    
-    private void init()
-    {
         length = 0;
         isSorted = false;
     }
     
+    // Adds new element to inner storage.
+    // Increases inner storage size if needed.
+    // isSorted will be set to false since after we added new element we can't
+    // be sure if our array is sorted (in case it was sorted before insert)
     public void add(int value)
     {
         if(length == storage.length - 1)
@@ -36,6 +35,10 @@ public class Vector
             isSorted = false;
     }
     
+    // Adds new element to storage.
+    // DOES NOT increase inner storage size or change isSorted property.
+    // Is used inside other "add" methods, which ones should do this job.
+    // Thus we can avoid doing extra useless actions during multiple elements inserts
     private void addUnsafely(int value)
     {
         storage[length] = value;
@@ -43,6 +46,7 @@ public class Vector
     }
     
     
+    // Adds entire array, no need for element by element insertion
     public void addArray(int[] values)
     {
         if(length + values.length > storage.length - 1)
@@ -57,24 +61,21 @@ public class Vector
         }
     }
     
+    // Replace inner storage with new array
     public void set(double[] data)
     {
         this.storage = data;
-        this.length = data.length - 1;
+        this.length = data.length;
         this.isSorted = false;
     }
     
+    // Add 10 new slots to inner storage
     private void increaseSize()
     {
-        double[] incrStorage = new double[storage.length + 10];
-        for(int i = 0; i < storage.length; i++)
-        {
-            incrStorage[i] = storage[i];
-        }
-        
-        this.storage = incrStorage;
+        increaseSize(10);
     }
     
+    // Add N new slots to inner storage
     private void increaseSize(int add)
     {
         double[] incrStorage = new double[storage.length + add];
@@ -92,15 +93,14 @@ public class Vector
         StringBuilder sb = new StringBuilder();
         sb.append("[");
         
-        boolean isEmpty = true;
         for(double val : storage)
         {
             sb.append(val);
             sb.append(", ");
-            isEmpty = false;
         }
         
-        if(!isEmpty)
+        // removes extra ", "
+        if(this.length > 0)
         {
             sb.replace(sb.length() - 2, sb.length(), "");
         }
@@ -110,7 +110,9 @@ public class Vector
         return sb.toString();
     }
     
-    public double[] getElements()
+    // create copy of array with occupied cells only
+    // (with length = local length field)
+    public double[] asArray()
     {
         double[] responce = new double[length];
         for(int i = 0; i < length; i++)
@@ -121,6 +123,7 @@ public class Vector
         return responce;
     }
     
+    
     public boolean isSorted()
     {
         return isSorted || scanIfSorted();
@@ -128,6 +131,7 @@ public class Vector
     
     private boolean scanIfSorted()
     {
+        // 2 and 1 items arrays are already kind of sorted
         if(length < 3)
         {
             return true;
@@ -393,5 +397,3 @@ public class Vector
         return -1;
     }
 }
-
-
