@@ -17,7 +17,7 @@ public class Matrix
     }
     
     // replaces inner storage with given array
-    // returns true is operation is successful
+    // returns true if operation is successful
     public boolean set(double[][] arr)
     {
         if(arr.length >= 2 && arr[0].length >= 2)
