@@ -2,50 +2,143 @@ package by.epam.javatraining.rassolko.maintask01.model;
 
 public class Vector
 {
+    private final static int DEFAULT_STORAGE_SIZE = 10;
+    private final static int STORAGE_INCREASE_VALUE = 10;
+    
+    
     private double[] storage;
     private int length;
     private boolean isSorted;
     
+    
     Vector()
     {
-        storage = new double[10];
-        init();
+        this(DEFAULT_STORAGE_SIZE);
     }
     
     Vector(int size)
     {
         storage = new double[size];
-        init();
-    }
-    
-    private void init()
-    {
         length = 0;
         isSorted = false;
     }
     
-    public void add(int value)
+    Vector(double[] array)
     {
-        if(length == storage.length - 1)
+        storage = array;
+        length = array.length;
+        isSorted = false;
+    }
+    
+    /** 
+     * Returns element that is situated at given position
+     * @param position position number
+     * @return proper element from inner Vector storage */
+    public double get(int position)
+    {
+        if(position >= length)
+        {
+            throw new IndexOutOfBoundsException();
+        }
+        
+        return storage[position];
+    }
+    
+    /** 
+     * Can be used to set new value to given position
+     * @param value new value to be set
+     * @param position position number */
+    public void set(double value, int position)
+    {
+        if(position >= length)
+        {
+            throw new IndexOutOfBoundsException();
+        }
+        
+        storage[position] = value;
+    }
+    
+    /**
+     * Can be used to get virtual (quantity of added elements) length of the Vector.
+     * Actual length of inner storage is hidden from users.
+     * @return virtual length of the Vector */
+    public int length()
+    {
+        return this.length;
+    }
+    
+    /**
+     * Returns the state of local boolean field that shows if this Vector is marked 
+     * as "Sorted". <br> 
+     * <b>False</b> responce doesn't actually mean that Vector is not sorted.
+     * Same thing for <b>True</b> value since this field can be set manually.<br>
+     * This flag is used in search methods since bynary search requires sorted storage.
+     * @return if this Vector is marked as "Sorted" */
+    public boolean isSorted()
+    {
+        return isSorted;
+    }
+    
+    /**
+     * Mark Vector as "Sorted" (parameter == true) 
+     * or "Not sorted" (parameter == false).
+     * @param param new value of the flag that indicates id the Vector 
+     * is marked as "Sorted" */
+    public void setSorted(boolean param)
+    {
+        isSorted = param;
+    }
+    
+    /** Replace inner storage with new array.
+     * <b>Warning!</b>: Do not use this to work directly with inner Vector storage.
+     * Vector can change inner storage object without any notification.
+     * @param data array that replaces inner Vector storage 
+     * @deprecated Not really usefull. Better use proper constructor instead */
+    @Deprecated
+    public void setStorage(double[] data)
+    {
+        storage = data;
+        length = data.length;
+        isSorted = false;
+    }
+    
+    
+    /** Adds new element to inner storage.
+     * Increases inner storage size if needed.<br>
+     * Vector will be marked as not sorted since after we added new element we can't
+     * be sure if our array is sorted (in case it was sorted before insert).
+     * @param value the value that will be added to Vector's storage's end */
+    public void add(double value)
+    {
+        if(length == storage.length)
         {
             increaseSize();
         }
         
-            storage[length] = value;
+            storage[length - 1] = value;
             length++;
             isSorted = false;
     }
     
+    /** 
+     * Adds new element to storage.<br>
+     * DOES NOT increase inner storage size or change isSorted property.
+     * Is used inside other "add" methods, which ones should do this job.
+     * Thus we can avoid doing extra useless actions during multiple 
+     * elements inserts */
     private void addUnsafely(int value)
     {
-        storage[length] = value;
+        storage[length - 1] = value;
         length++;
     }
     
     
+    /** 
+     * Adds entire array, no need for element by element insertion.
+     * @param values the values that will be added to the Vector's storage's end. */
     public void addArray(int[] values)
     {
-        if(length + values.length > storage.length - 1)
+        if(length + values.length > storage.length)
         {
             increaseSize(values.length);
             isSorted = false;
@@ -57,176 +150,30 @@ public class Vector
         }
     }
     
-    public void set(double[] data)
-    {
-        this.storage = data;
-        this.length = data.length - 1;
-        this.isSorted = false;
-    }
-    
+    /** 
+     * Adds DEFAULT_VALUE slots to inner storage */
     private void increaseSize()
     {
-        double[] incrStorage = new double[storage.length + 10];
-        for(int i = 0; i < storage.length; i++)
-        {
-            incrStorage[i] = storage[i];
-        }
-        
-        this.storage = incrStorage;
+        increaseSize(STORAGE_INCREASE_VALUE);
     }
     
+    /** 
+     * Add N new slots to inner storage.
+     * @param add quantity of slots that need to be added */
     private void increaseSize(int add)
     {
         double[] incrStorage = new double[storage.length + add];
-        for(int i = 0; i < storage.length; i++)
-        {
-            incrStorage[i] = storage[i];
-        }
+        System.arraycopy(storage, 0, incrStorage, 0, storage.length);
         
         this.storage = incrStorage;
     }
     
-    @Override
-    public String toString()
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
-        
-        boolean isEmpty = true;
-        for(double val : storage)
-        {
-            sb.append(val);
-            sb.append(", ");
-            isEmpty = false;
-        }
-        
-        if(!isEmpty)
-        {
-            sb.replace(sb.length() - 2, sb.length(), "");
-        }
-        
-        sb.append("]");
-                
-        return sb.toString();
-    }
-    
-    public double[] getElements()
-    {
-        double[] responce = new double[length];
-        for(int i = 0; i < length; i++)
-        {
-            responce[i] = storage[i];
-        }
-        
-        return responce;
-    }
-    
-    public boolean isSorted()
-    {
-        return isSorted || scanIfSorted();
-    }
-    
-    private boolean scanIfSorted()
-    {
-        if(length < 3)
-        {
-            return true;
-        }
-        
-        // Searching for two prev differest values in our storage.
-        // In case if this way we reach the end of our storage - this means that
-        // all elements inside are equal -> our Vector is kind of sorted
-        int prev = 0; int next = 1;
-        while(storage[prev] == storage[next])
-        {
-            prev++;
-            next++;
-            if(next == length)
-            {
-                return true;
-            }
-        }
-        
-        // Checking if our vector is ascending or descending so far
-        // (according to 2 found elements).
-        // Keep checking elements. If during this procedure we find out that 
-        // rules has changed and current little part of our vector becomes 
-        // !isAscending - this thing is not a valid sorted vector.
-        // Otherwise - if we reach the end of our storage and nothing has changed - 
-        // the vector is sorted
-        boolean isAscending = next > prev;
-        if(isAscending)
-        {
-            while(storage[prev] <= storage[next] && next < length)
-            {
-                prev++;
-                next++;
-            }
-        }
-        else
-        {
-            while(storage[prev] >= storage[next] && next < length)
-            {
-                prev++;
-                next++;
-            }
-        }
-        
-        this.isSorted = next < length;
-        return this.isSorted;
-    }
-    
-    public double getMax()
-    {
-        if(isSorted)
-        {
-            return storage[0] > storage[length - 1] ? 
-                   storage[0] : storage[length];
-        }
-
-        return getMax_linear();
-    }
-    
-    public double getMin()
-    {
-        if(isSorted)
-        {
-            return storage[0] < storage[length - 1] ? 
-                   storage[0] : storage[length];
-        }
-
-        return getMin_linear();
-    }
-
-    private double getMax_linear()
-    {
-        double max = storage[0];
-        for(int i = 1; i < length; i++)
-        {
-            if(storage[i] > max)
-            {
-                max = storage[i];
-            }
-        }
-        
-        return max;
-    }
-    
-    private double getMin_linear()
-    {
-        double min = storage[0];
-        for(int i = 1; i < length; i++)
-        {
-            if(storage[i] < min)
-            {
-                min = storage[i];
-            }
-        }
-        
-        return min;
-    }
-    
-    public int search(double elem)
+    /**
+     * Search for set element position. Depending on if this Vector is marked as
+     * "Sorted" linear or bynary search can be used. 
+     * @param elem the value that needs to be found
+     * @return element's position or -1 in case if proper value is missing. */
+    public int getElementPosition(double elem)
     {
         // there is no point in bynary search in small arrays
         // and bynary search simply doesn't work for unsorted arrays
@@ -238,6 +185,10 @@ public class Vector
         return search_linear(elem);
     }
     
+    /**
+     * Linear search for not sorted Vector.
+     * @param elem the element that needs to be found
+     * @return element's position or -1 in case if proper value is missing. */
     private int search_linear(double elem)
     {
         for(int i = 0; i < this.length; i++)
@@ -251,6 +202,10 @@ public class Vector
         return -1;
     }
     
+    /**
+     * Bynary search for Vector that marked as "Sorted".
+     * @param elem the element that needs to be found
+     * @return element's position or -1 in case if proper value is missing. */
     private int search_bynary(double elem)
     {
         // in case all elements in our vector are equal
@@ -305,93 +260,33 @@ public class Vector
         
     }
     
-    public double calcArithmeticMean()
+ 
+    /**
+     * @return a string representation of the Vector. */
+    @Override
+    public String toString()
     {
-        // in case our vector is empty
-        if(length == 0)
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        
+        for(double val : storage)
         {
-            return 0;
+            sb.append(val);
+            sb.append(", ");
         }
         
-        double sum = 0;
-        for(double elem : storage)
+        // removes extra ", "
+        if(this.length > 0)
         {
-            sum += elem;
+            sb.replace(sb.length() - 2, sb.length(), "");
         }
         
-        return sum / length;
-    }
-    
-    public double calcGeometricMean()
-    {
-        // in case our vector is empty
-        if(length == 0)
-        {
-            return 0;
-        }
-        
-        double mult = 1;
-        for(double elem : storage)
-        {
-            mult *= elem;
-        }
-        
-        return Math.pow(mult, 1.0 / length);
-    }
-    
-    public Vector reverse()
-    {
-        int mirror;
-        double tmp;
-        int limit = length / 2;
-        for(int i = 0; i < limit; i++)
-        {
-            mirror = length - 1 - i;
-            tmp = storage[i];
-            storage[i] = storage[mirror];
-            storage[mirror] = tmp;
-        }
-        
-        return this;
-    }
-    
-    // we create "fake" elements for storage[-1] and storage[length] to be able
-    // to work with border elements of our vector without overcomplicating
-    // our code with additional branches for first and last elements
-    public int getFirstLocalMaxPosition()
-    {
-        for(int i = 0; i < length; i++)
-        {
-            double prev = i > 0 ? storage[i - 1] : Double.MIN_VALUE;
-            double next = i < length - 1 ? storage[i + 1] : Double.MIN_VALUE;
-            
-            if(storage[i] > prev && storage[i] > next)
-            {
-                return i;
-            }
-        }
-        
-        return -1;
-    }
-    
-    // we create "fake" elements for storage[-1] and storage[length] to be able
-    // to work with border elements of our vector without overcomplicating
-    // our code with additional branches for first and last elements
-    public int getFirstLocalMinPosition()
-    {
-        for(int i = 0; i < length; i++)
-        {
-            double prev = i > 0 ? storage[i - 1] : Double.MAX_VALUE;
-            double next = i < length - 1 ? storage[i + 1] : Double.MAX_VALUE;
-            
-            if(storage[i] < prev && storage[i] < next)
-            {
-                return i;
-            }
-        }
-        
-        return -1;
+        sb.append("]");
+                
+        return sb.toString();
     }
 }
+
+
 
 
