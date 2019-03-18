@@ -1,4 +1,4 @@
-package by.epam.javatraining.rassolko.maintask01.model.entity;
+package by.epam.javatraining.rassolko.maintask01.model.utils;
 
 public class VectorWorker 
 {
