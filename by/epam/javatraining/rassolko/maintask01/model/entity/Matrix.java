@@ -4,54 +4,122 @@ public class Matrix
 {
     double[][] storage;
     
+    int rowQuantity;
+    int columnQuantity;
+    
+    /**
+     * Constructor that creates empty Matrix of given size
+     * @param a - heights of the Matrix (rows quantity)
+     * @param b - width of the Matrix (columns quantity) */
     Matrix(int a, int b)
     {
-        if(a > 0 && b > 0)
-        {
-            storage = new double[a][b];
-        }
-        else
-        {
-            storage = new double[0][0];
-        }
+        int rowQuantity    = a > 0 ? a : 0;
+        int columnQuantity = b > 0 ? b : 0;
+        
+        storage = new double[rowQuantity][columnQuantity];
+        
+        this.rowQuantity = rowQuantity;
+        this.columnQuantity = columnQuantity;
+        
     }
     
+    /**
+     * Constructor that creates empty Matrix that guaranteed contains all values
+     * from the array sent in parameters. In case if that array has second level 
+     * arrays with various lengths, extra cells in Matrix will be filled with "0".
+     * If given array is complitely broken - matrix will have 0*0 size
+     * @param arr - array that needs to be used as Matrix source */
     Matrix(double[][] arr)
     {
-        storage = arr;
-    }
-    
-    // replaces inner storage with given array
-    // returns true is operation is successful
-    public boolean set(double[][] arr)
-    {
-        if(arr.length >= 2 && arr[0].length >= 2)
+        int rowQuantity = 0;
+        int columnQuantity = 0;
+        
+        if(arr.length > 0)
         {
-            int width = arr[0].length;
-            for(double[] subval : arr)
-            {
-                if(subval.length != width)
-                {
-                    return false;
-                }
-            }
+            rowQuantity = arr.length;
             
-            storage = arr;
-            return true;
+            for(double[] column : arr)
+            {
+                columnQuantity = column.length > columnQuantity 
+                               ? column.length : columnQuantity;
+            }   
         }
         
-        return false;
+        storage = new double[rowQuantity][columnQuantity];
+        
+        this.rowQuantity = rowQuantity;
+        this.columnQuantity = columnQuantity;
+        
+        for(int row = 0; row < arr.length; row++)
+        {
+            for(int column = 0; column < arr[row].length; column++)
+            {
+                storage[row][column] = arr[row][column];
+            }
+        } 
     }
     
-    // set given value at given coordinates cell
-    // method returns true only in case if given coordinates fit local storage
-    public boolean set(int xPos, int yPos, double value)
+    /**
+     * Can be used to create copy of already existing Matrix object
+     * @param source Matrix to be copied */
+    Matrix(Matrix source)
     {
-        if(xPos >= 0 && xPos < storage.length)
+        columnQuantity = source.columnQuantity;
+        rowQuantity = source.rowQuantity;
+        storage = new double[rowQuantity][columnQuantity];
+        
+        for(int row = 0; row < rowQuantity; row++)
         {
-            if(yPos >= 0 && yPos < storage[0].length)
+            for(int column = 0; column < columnQuantity; column++)
             {
-                storage[xPos][yPos] = value;
+                this.storage[row][column] = source.storage[row][column];
+            }
+        }
+    }
+    
+    
+    /**
+     * @param row current Matrix row index starting from 0
+     * @param column current Matrix column index starting from 0
+     * @return value from cell by given coordinates */
+    public double get(int row, int column)
+    {
+        if(row < rowQuantity && column < columnQuantity)
+        {
+            return storage[row][column];
+        }
+        
+        throw new IndexOutOfBoundsException();
+    }
+    
+    /**
+     * @return quantity of rows of the Matrix */
+    public int rows()
+    {
+        return rowQuantity;
+    }
+    
+    /**
+     * @return quantity of columns of the Matrix */
+    public int columns()
+    {
+        return columnQuantity;
+    }
+    
+    /** 
+     * Set given value at given coordinates cell.
+     * @param row row index of current Matrix, starting from 0
+     * @param column column indexof current Matrix, starting from 0
+     * @param value value that need to be placed by given coordinates
+     * @return true if given coordinates fit local storage and the value was set, 
+     * false if not */
+    public boolean set(int row, int column, double value)
+    {
+        if(row >= 0 && row < rowQuantity)
+        {
+            if(column >= 0 && column < columnQuantity)
+            {
+                storage[row][column] = value;
                 return true;
             }
         }
@@ -59,98 +127,62 @@ public class Matrix
         return false;
     }
     
-    // returns the smallest value in local storage
-    public double getMin()
-    {
-        double min = Double.MAX_VALUE;
+    /**
+     * Works the very same way as similar constructor - except creating new object. 
+     * Creates empty Matrix that guaranteed contains all values
+     * from the array sent in parameters. In case if that array has second level 
+     * arrays with various lengths, extra cells in Matrix will be filled with "0".
+     * If given array is complitely broken - matrix will have 0*0 size.
+     * @param arr - array that needs to be used as Matrix source */
+    public void set(double[][] arr)
+    { 
+        int rowQuantity = 0;
+        int columnQuantity = 0;
         
-        for(double[] row : storage)
+        if(arr.length > 0)
         {
-            for(double element : row)
+            rowQuantity = arr.length;
+            
+            for(double[] column : arr)
             {
-                if(min > element)
-                {
-                    min = element;
-                }
-            }
+                columnQuantity = column.length > columnQuantity 
+                               ? column.length : columnQuantity;
+            }   
         }
         
-        return min;  
-    }
-    
-    // returns the biggest value in local storage
-    public double getMax()
-    {
-        double max = Double.MIN_VALUE;
+        storage = new double[rowQuantity][columnQuantity];
         
-        for(double[] row : storage)
+        this.rowQuantity = rowQuantity;
+        this.columnQuantity = columnQuantity;
+        
+        for(int row = 0; row < arr.length; row++)
         {
-            for(double element : row)
+            for(int column = 0; column < arr[row].length; column++)
             {
-                if(max < element)
-                {
-                    max = element;
-                }
+                storage[row][column] = arr[row][column];
             }
-        }
-        
-        return max;  
+        } 
     }
-    
-    // checks if matrix is symmetric - from p.o.w. of main or secondary diagonale
-    // our matrix needs to be square and it's size must be 2x2 at the very least
-    // if these conditions aren't fullfilled - false will be returned
-    public boolean isSymmetric()
+   
+    /**
+     * Creates copy of Matrix in form of array. If actions upon this array need
+     * to act on this Matrix - after these actions the array must be returned 
+     * to Matrix using method <b>set(double[][] arr)</b>
+     * @return array representation of this object */
+    public double[][] toArray()
     {
-        if(storage.length < 2 || storage.length != storage[0].length)
-        {
-            return false;
-        }
-
-        return isSymmetricMain() || isSymmetricSecondary();
+        double[][] responce = new double[rowQuantity][columnQuantity];
+        System.arraycopy(storage, 0, responce, 0, storage.length);
+        return responce;
     }
     
-    // check main diagonale symmetry
-    private boolean isSymmetricMain()
-    {
-        for(int i = 0; i < storage.length - 1; i++)
-        {
-            for(int j = i + 1; j < storage.length; j++)
-            {
-                if(storage[i][j] != storage[j][i])
-                {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-    
-    // check secondary diagonale symmetry
-    private boolean isSymmetricSecondary()
-    {
-        for(int i = 0; i < storage.length - 1; i++)
-        {
-            for(int j = 0; j < storage.length - 1 - i; j++)
-            {
-                if( storage[i][j] 
-                    != 
-                    storage[storage.length - 1 - j][storage.length - 1 - i])
-                {
-                    return false;
-                }
-            }
-        }
-        
-        return true;
-    }
-    
-    // Transpose Matrix x*y
-    // Uses separate methods for cases where x = y and x != y
+    /** 
+     * Transpose Matrix x*y
+     * Uses separate methods for cases where x = y and where x != y
+     * @return link to current Matrix object. Can be used in method chaining */
     public Matrix transpose()
     {
-        if(storage.length == storage[0].length)
+        if(rowQuantity == columnQuantity)
         {
             transposeSquare();
         }
@@ -159,16 +191,23 @@ public class Matrix
             transposeNonSquare();
         }
         
+        int tmp = rowQuantity;
+        rowQuantity = columnQuantity;
+        columnQuantity = tmp;
+        
         return this;
     }
     
+    /**
+     * Transpose Matrix x*y where x == y. No memory for new inner storage object 
+     * required. */
     private void transposeSquare()
     {
         double tmp;
         
-        for(int i = 0; i < storage.length; i++)
+        for(int i = 0; i < rowQuantity; i++)
         {
-            for(int j = i; j < storage.length; j++)
+            for(int j = i; j < columnQuantity; j++)
             {
                 tmp = storage[i][j];
                 storage[i][j] = storage[j][i];
@@ -177,12 +216,15 @@ public class Matrix
         }
     }
     
+    /**
+     * Transpose Matrix x*y where x != y. Required additional memory for new 
+     * inner storage object. */
     private void transposeNonSquare()
     {
-        double[][] transpondedMatrix = new double[storage[0].length][storage.length];
-        for(int i = 0; i < storage[0].length; i++)
+        double[][] transpondedMatrix = new double[columnQuantity][rowQuantity];
+        for(int i = 0; i < columnQuantity; i++)
         {
-            for(int j = 0; j < storage.length; j++)
+            for(int j = 0; j < rowQuantity; j++)
             {
                 transpondedMatrix[i][j] = storage[j][i];
             }
@@ -191,93 +233,8 @@ public class Matrix
         storage = transpondedMatrix;
     }
     
-    public int getFirstLocalMinPosition()
-    {
-        for(int i = 0; i < storage.length; i++)
-        {
-            for(int j = 0; j < storage[0].length; j++)
-            {
-                double[] neighbours = getNeighbours(i, j, Double.MAX_VALUE);
-                
-                // by default we think that curren element is local minimum
-                boolean isLocalMin = true;
-                for(double n : neighbours)
-                {
-                    if(storage[i][j] >= n)
-                    {
-                        isLocalMin = false;
-                    }
-                }
-                
-                if(isLocalMin)
-                {
-                    return i + j * storage[0].length + 1;
-                }
-            }
-        }
-        
-        return -1;
-    }
-    
-    public int getFirstLocalMaxPosition()
-    {
-        for(int i = 0; i < storage.length; i++)
-        {
-            for(int j = 0; j < storage[0].length; j++)
-            {
-                double[] neighbours = getNeighbours(i, j, Double.MIN_VALUE);
-                
-                // by default we think that curren element is local minimum
-                boolean isLocalMax = true;
-                for(double n : neighbours)
-                {
-                    if(storage[i][j] <= n)
-                    {
-                        isLocalMax = false;
-                    }
-                }
-                
-                if(isLocalMax)
-                {
-                    return i + j * storage[0].length + 1;
-                }
-            }
-        }
-        return -1;
-    }
-    
-    // Gets us near-by element to compare to.
-    // Can be used to find local min or max
-    private double[] getNeighbours(int xPos, int yPos, double filler)
-    {
-        double[] neighbours = new double[8];
-        
-        int k = 0;
-        for(int i = xPos - 1; i <= xPos + 1; i++)
-        {
-            for(int j = yPos - 1; j <= yPos + 1; j++)
-            {
-                if(i == xPos && j == yPos)
-                {
-                    continue;
-                }
-                
-                if( (i < 0 || j < 0) || (i >= storage.length || j >= storage[0].length) )
-                {
-                    neighbours[k++] = filler;
-                }
-                else
-                {
-                    neighbours[k++] = storage[i][j];
-                }
-            }
-        }
-        
-        // debug
-        // System.out.println(storage[xPos][yPos] + " -> " + Arrays.toString(neighbours));
-        return neighbours;
-    }
-    
+    /**
+     * @return String representation of an object */
     @Override
     public String toString()
     {
