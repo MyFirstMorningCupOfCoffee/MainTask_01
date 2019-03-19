@@ -2,33 +2,49 @@ package by.epam.javatraining.rassolko.maintask01.model.entity;
 
 public class Vector
 {
-    private final static int DEFAULT_STORAGE_SIZE = 10;
-    private final static int STORAGE_INCREASE_VALUE = 10;
-    
-    
     private double[] storage;
     private int length;
-    private boolean isSorted;
+    private boolean sorted;
     
-    
+    /**
+     * Creates Vector with inner storage size == default (10) */
     Vector()
     {
-        this(DEFAULT_STORAGE_SIZE);
+        this(10);
     }
     
+    /**
+     * Creates Vector with specified inner storage size
+     * @param size size of inner Vector storage */
     Vector(int size)
     {
         storage = new double[size];
         length = 0;
-        isSorted = false;
+        sorted = false;
     }
     
+    /**
+     * Creates Vector using given array as basis
+     * @param array this array will be used as created Vector data */
     Vector(double[] array)
     {
         storage = array;
         length = array.length;
-        isSorted = false;
+        sorted = false;
     }
+    
+    /**
+     * Can be used to create copy of already existing Vector object
+     * @param source Vector object to be copied */
+    Vector(Vector source)
+    {
+        storage = new double[source.length];
+        System.arraycopy(source.storage, 0, storage, 0, length);
+        
+        length = source.length;
+        sorted = source.sorted;
+    }
+    
     
     /** 
      * Returns element that is situated at given position
@@ -151,10 +167,10 @@ public class Vector
     }
     
     /** 
-     * Adds DEFAULT_VALUE slots to inner storage */
+     * Adds default quantity (== 10) slots to inner storage */
     private void increaseSize()
     {
-        increaseSize(STORAGE_INCREASE_VALUE);
+        increaseSize(10);
     }
     
     /** 
