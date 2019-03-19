@@ -6,8 +6,14 @@ public class Matrix
     
     Matrix(int a, int b)
     {
-        // TBD: check if these parametes are valid ones
-        storage = new double[a][b];
+        if(a > 0 && b > 0)
+        {
+            storage = new double[a][b];
+        }
+        else
+        {
+            storage = new double[0][0];
+        }
     }
     
     Matrix(double[][] arr)
