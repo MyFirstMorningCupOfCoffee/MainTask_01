@@ -21,7 +21,7 @@ public class OutputWorker
         System.out.print(text);
     }
     
-    //print empty line
+    // print empty line
     public static void insertEmptyLine()
     {
         System.out.println();
