@@ -7,7 +7,7 @@ public class Vector
     private boolean sorted;
     
     /**
-     * Creates Vector with inner storage size == default (10) */
+     * Creates Vector with default inner storage size = 10 */
     Vector()
     {
         this(10);
@@ -44,7 +44,6 @@ public class Vector
         length = source.length;
         sorted = source.sorted;
     }
-    
     
     /** 
      * Returns element that is situated at given position
@@ -92,7 +91,7 @@ public class Vector
      * @return if this Vector is marked as "Sorted" */
     public boolean isSorted()
     {
-        return isSorted;
+        return sorted;
     }
     
     /**
@@ -102,7 +101,7 @@ public class Vector
      * is marked as "Sorted" */
     public void setSorted(boolean param)
     {
-        isSorted = param;
+        sorted = param;
     }
     
     /** Replace inner storage with new array.
@@ -115,7 +114,7 @@ public class Vector
     {
         storage = data;
         length = data.length;
-        isSorted = false;
+        sorted = false;
     }
     
     
@@ -126,6 +125,7 @@ public class Vector
      * @param value the value that will be added to Vector's storage's end */
     public void add(double value)
     {
+        System.out.println(java.util.Arrays.toString(storage));
         if(length == storage.length)
         {
             increaseSize();
@@ -133,18 +133,19 @@ public class Vector
         
             storage[length] = value;
             length++;
-            isSorted = false;
+            sorted = false;
+            System.out.println(java.util.Arrays.toString(storage));
     }
     
     /** 
      * Adds new element to storage.<br>
-     * DOES NOT increase inner storage size or change isSorted property.
+     * DOES NOT increase inner storage size or change sorted property.
      * Is used inside other "add" methods, which ones should do this job.
      * Thus we can avoid doing extra useless actions during multiple 
      * elements inserts */
-    private void addUnsafely(int value)
+    private void addUnsafely(double value)
     {
-        storage[length - 1] = value;
+        storage[length] = value;
         length++;
     }
     
@@ -152,22 +153,22 @@ public class Vector
     /** 
      * Adds entire array, no need for element by element insertion.
      * @param values the values that will be added to the Vector's storage's end. */
-    public void addArray(int[] values)
+    public void addArray(double[] values)
     {
         if(length + values.length > storage.length)
         {
             increaseSize(values.length);
-            isSorted = false;
+            sorted = false;
         }
         
-        for(int val : values)
+        for(double val : values)
         {
             addUnsafely(val);
         }
     }
     
     /** 
-     * Adds default quantity (== 10) slots to inner storage */
+     * Adds default value slots (10) to inner storage */
     private void increaseSize()
     {
         increaseSize(10);
@@ -193,7 +194,7 @@ public class Vector
     {
         // there is no point in bynary search in small arrays
         // and bynary search simply doesn't work for unsorted arrays
-        if(isSorted && length > 4)
+        if(sorted && length > 4)
         {
             return search_bynary(elem);
         }
@@ -274,11 +275,15 @@ public class Vector
             return -1;
         }
         
+
+    public double[] asArray()
+    {
+        return storage;
     }
     
- 
     /**
-     * @return a string representation of the Vector. */
+     * @return a string representation of the Vector.
+     */
     @Override
     public String toString()
     {
@@ -302,7 +307,3 @@ public class Vector
         return sb.toString();
     }
 }
-
-
-
-
