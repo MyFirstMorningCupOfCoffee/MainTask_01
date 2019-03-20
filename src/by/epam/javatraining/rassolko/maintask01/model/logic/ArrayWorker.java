@@ -1,6 +1,6 @@
 package by.epam.javatraining.rassolko.maintask01.model.logic;
 
-public class ArraysWorker 
+public class ArrayWorker 
 {
     public static enum Order 
         { Ascending, Descending };
