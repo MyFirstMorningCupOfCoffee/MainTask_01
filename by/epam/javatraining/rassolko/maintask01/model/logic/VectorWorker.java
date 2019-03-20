@@ -1,4 +1,6 @@
-package by.epam.javatraining.rassolko.maintask01.model.utils;
+package by.epam.javatraining.rassolko.maintask01.model.logic;
+
+import package by.epam.javatraining.rassolko.maintask01.model.entity.Vector;
 
 public class VectorWorker 
 {
@@ -6,8 +8,8 @@ public class VectorWorker
      * create copy of array with occupied cells only
      * (with length = local length field).
      * @param v Vector object that needs to be transformed to array
-     * @return  array representation of the Vector*/
-    public static double[] asArray(Vector v)
+     * @return  array representation of the Vector */
+    public static double[] toArray(Vector v)
     {
         double[] responce = new double[v.length()];
         
@@ -84,7 +86,7 @@ public class VectorWorker
             }
         }
         
-        // marking vector as "Sorted" (Or nor) according to the scan results
+        // marking vector as "Sorted" (or not) according to the scan results
         v.setSorted(next < v.length());
         
         return next < v.length();
@@ -102,7 +104,7 @@ public class VectorWorker
                    v.get(0) : v.get(v.length() - 1);
         }
 
-        return getMax_linear(v);
+        return getMaxLinear(v);
     }
     
     /**
@@ -117,7 +119,7 @@ public class VectorWorker
                    v.get(0) : v.get(v.length() - 1);
         }
 
-        return getMin_linear(v);
+        return getMinLinear(v);
     }
     
     /**
@@ -125,7 +127,7 @@ public class VectorWorker
      * Used to search in Vectors that aren't marked as "Sorted".
      * @param v Vector that needs to be processed
      * @return maximal value */
-    private static double getMax_linear(Vector v)
+    private static double getMaxLinear(Vector v)
     {
         double max = v.get(0);
         for(int i = 1; i < v.length(); i++)
@@ -144,7 +146,7 @@ public class VectorWorker
      * Used to search in Vectors that aren't marked as "Sorted".
      * @param v Vector that needs to be processed
      * @return minimal value */
-    private static double getMin_linear(Vector v)
+    private static double getMinLinear(Vector v)
     {
         double min = v.get(0);
         for(int i = 1; i < v.length(); i++)
