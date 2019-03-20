@@ -34,7 +34,7 @@ public class VectorTest
     }
     
     @Test
-    public void testgetElementPosition()
+    public void testGetElementPosition()
     {
         Vector v = new Vector( new double[] {44, 411, 814, 555, 255.0, 844} );
         int pos = v.getElementPosition(555);
