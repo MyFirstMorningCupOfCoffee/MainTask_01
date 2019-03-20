@@ -87,9 +87,9 @@ public class VectorWorker
         }
         
         // marking vector as "Sorted" (or not) according to the scan results
-        v.setSorted(next < v.length());
+        v.setSorted(next == v.length());
         
-        return next < v.length();
+        return next = v.length();
     }
     
     /**
