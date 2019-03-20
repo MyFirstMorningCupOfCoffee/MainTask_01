@@ -7,16 +7,16 @@ public class OutputWorker
     { }
     
     // print several lines to console
-    public static void printlnToConsole(String ... text)
+    public static void printlnToConsole(Object ... text)
     {
-        for(String s : text)
+        for(Object s : text)
         {
             System.out.println(s);
         }
     }
     
     // print single line to console
-    public static void printToConsole(String text)
+    public static void printToConsole(Object text)
     {
         System.out.print(text);
     }
