@@ -1,6 +1,6 @@
 package by.epam.javatraining.rassolko.maintask01.model.logic;
 
-import package by.epam.javatraining.rassolko.maintask01.model.entity.Vector;
+import by.epam.javatraining.rassolko.maintask01.model.entity.Vector;
 
 public class VectorWorker 
 {
