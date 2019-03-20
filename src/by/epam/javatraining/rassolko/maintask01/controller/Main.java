@@ -20,17 +20,13 @@ public class Main
         printToConsole("initial vector: ");
         printlnToConsole(vector);
         
-
-        
         printToConsole("calculating geometric mean: ");
         double gMean = VectorWorker.calcGeometricMean(vector);
         printlnToConsole(gMean);
         
-        
         printToConsole("calculating arythmetic mean: ");
         double aMean = VectorWorker.calcArithmeticMean(vector);
         printlnToConsole(aMean);
-        
         
         printToConsole("getting first local minimum position: ");
         int minPos = VectorWorker.getFirstLocalMinPosition(vector);
@@ -75,6 +71,8 @@ public class Main
         printlnToConsole(sorted);
         
         insertEmptyLine();
+        
+        
         
         printlnToConsole("--- Matrix ---");        
         insertEmptyLine();
