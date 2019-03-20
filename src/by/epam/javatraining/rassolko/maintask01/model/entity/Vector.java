@@ -131,7 +131,7 @@ public class Vector
             increaseSize();
         }
         
-            storage[length - 1] = value;
+            storage[length] = value;
             length++;
             isSorted = false;
     }
