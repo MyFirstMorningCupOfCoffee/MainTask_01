@@ -27,7 +27,7 @@ public class ArrayWorker
     
     /** 
      * Sort method #1: simpliest method, will sort whole array, ascending, 
-     * using default sort type (selection sort).
+     * using default sort type.
      * @param array array to be sorted */
     public static void sort(double[] array)
     {
@@ -40,7 +40,7 @@ public class ArrayWorker
      * @param order Order enum member, represents sort order */
     public static void sort(double[] array, Order order)
     {
-        sort(array, 0, array.length, order, SortType.InsertionSort);
+        sort(array, 0, array.length, order, SortType.BubbleSort);
     }
     
     /** 
@@ -56,13 +56,13 @@ public class ArrayWorker
     
     /** 
      * Sort method #4: sort part of given array (set by parameters), ascending, 
-     * using default sort type (selection sort).
+     * using default sort type.
      * @param array array to be sorted
      * @param from sort in range from ... index
      * @param length length of subarray that must be sorted */
     public static void sort(double[] array, int from, int length)
     {
-        sort(array, from, length, Order.Ascending, SortType.SelectionSort);
+        sort(array, from, length, Order.Ascending, SortType.BubbleSort);
     }
     
     /** 
@@ -74,7 +74,7 @@ public class ArrayWorker
      * @param order Order enum member, represents sort order */
     public static void sort(double[] array, int from, int length, Order order)
     {
-        sort(array, from, length, order, SortType.SelectionSort);
+        sort(array, from, length, order, SortType.BubbleSort);
     }
     
     /** 
