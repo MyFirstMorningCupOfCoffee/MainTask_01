@@ -1,6 +1,4 @@
-package by.epam.javatraining.rassolko.maintask01.model.utils;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+package by.epam.javatraining.rassolko.maintask01.model.logic;
 
 public class ArraysWorker 
 {
