@@ -57,13 +57,22 @@ public class Main
         printlnToConsole(sorted);
         
         printToConsole("sorting vector, ascending: ");
-        ArraysWorker.sort(vector.asArray(), 0, vector.length());
+        ArraysWorker.sort(vector.asArray(), 0, vector.length(), 
+                ArraysWorker.Order.Ascending);
         printlnToConsole(vector);
+        
+        printToConsole("check if vector is sorted: ");
+        sorted = VectorWorker.isSorted(vector);
+        printlnToConsole(sorted);
         
         printToConsole("sorting vector, descending: ");
         ArraysWorker.sort(vector.asArray(), 0, vector.length(), 
-                ArraysWorker.Order.Descending, ArraysWorker.SortType.BubbleSort);
+                ArraysWorker.Order.Descending);
         printlnToConsole(vector);
+        
+        printToConsole("check if vector is sorted: ");
+        sorted = VectorWorker.isSorted(vector);
+        printlnToConsole(sorted);
         
         insertEmptyLine();
         
