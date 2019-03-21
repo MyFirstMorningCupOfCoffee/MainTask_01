@@ -1,11 +1,15 @@
 package by.epam.javatraining.rassolko.maintask01.model.logic;
 
-public class ArrayWorker 
+public class ArraysWorker 
 {
+    private static final SortType DEFAULT_SORT_TYPE = SortType.SelectionSort;
+    
     public static enum Order 
         { Ascending, Descending };
     public static enum SortType 
         { QuickSort, InsertionSort, BubbleSort, SelectionSort, MergeSort };
+    
+        
     
     /** 
      * returns part of array
@@ -40,7 +44,7 @@ public class ArrayWorker
      * @param order Order enum member, represents sort order */
     public static void sort(double[] array, Order order)
     {
-        sort(array, 0, array.length, order, SortType.BubbleSort);
+        sort(array, 0, array.length, order, DEFAULT_SORT_TYPE);
     }
     
     /** 
@@ -62,19 +66,19 @@ public class ArrayWorker
      * @param length length of subarray that must be sorted */
     public static void sort(double[] array, int from, int length)
     {
-        sort(array, from, length, Order.Ascending, SortType.BubbleSort);
+        sort(array, from, length, Order.Ascending, DEFAULT_SORT_TYPE);
     }
     
     /** 
      * Sort method #5: sort part of given array (set by parameters), 
-     * using default sort type (selection sort).
+     * using default sort type.
      * @param array array to be sorted
      * @param from sort in range from ... index
      * @param length length of subarray that must be sorted
      * @param order Order enum member, represents sort order */
     public static void sort(double[] array, int from, int length, Order order)
     {
-        sort(array, from, length, order, SortType.BubbleSort);
+        sort(array, from, length, order, DEFAULT_SORT_TYPE);
     }
     
     /** 
@@ -241,20 +245,14 @@ public class ArrayWorker
     private static void sortSelectionAsc(double[] array, int from, int length)
     {
         double tmp;
-        int max;
         int min;
         
-        for(int i = from; i < length / 2; i++)
+        for(int i = from; i < length; i++)
         {
-            max = i;
             min = i;
             
-            for(int j = i; j < length - i; j++)
+            for(int j = i; j < length; j++)
             {
-                if(array[j] > array[max])
-                {
-                    max = j;
-                }
                 if(array[j] < array[min])
                 {
                     min = j;
@@ -264,10 +262,7 @@ public class ArrayWorker
             tmp = array[i];
             array[i] = array[min];
             array[min] = tmp;
-            
-            tmp = array[length - 1 - i];
-            array[length - 1 - i] = array[max];
-            array[max] = tmp;
+
         }
     }
     
@@ -275,32 +270,22 @@ public class ArrayWorker
     {
         double tmp;
         int max;
-        int min;
         
-        for(int i = from; i < length / 2; i++)
+        for(int i = from; i < length; i++)
         {
             max = i;
-            min = i;
             
-            for(int j = i; j < length - i; j++)
+            for(int j = i; j < length; j++)
             {
                 if(array[j] > array[max])
                 {
                     max = j;
-                }
-                if(array[j] < array[min])
-                {
-                    min = j;
                 }
             }
             
             tmp = array[i];
             array[i] = array[max];
             array[max] = tmp;
-            
-            tmp = array[length - 1 - i];
-            array[length - 1 - i] = array[min];
-            array[min] = tmp;
         }
     }
     
@@ -322,7 +307,15 @@ public class ArrayWorker
         if(array.length > 2)
         {
             double[] part1 = subarray(array, from, length / 2);
-            double[] part2 = subarray(array, length / 2, length);
+            double[] part2 = subarray(array, from + length / 2, length);
+            
+            System.out.print("initial array: ");
+            System.out.println(Arrays.toString(subarray(array, from, length)));
+            System.out.print("1st array: ");
+            System.out.println(Arrays.toString(subarray(array, from, length / 2)));
+            System.out.print("2nd array: ");
+            System.out.println(Arrays.toString(subarray(array, from + length / 2, length)));
+            System.out.println("*: " + (length - length / 2));
             
             sortMergeAsc(part1, 0, part1.length);
             sortMergeAsc(part2, 0, part2.length);
@@ -427,11 +420,10 @@ public class ArrayWorker
     
     private static void sortQuickAsc(double[] array, int from, int length)
     {
-        throw new sun.reflect.generics.reflectiveObjects.NotImplementedException();
+        throw new NotImplementedException();
     }
     
     private static void sortQuickDesc(double[] array, int from, int length)
     {
-        throw new sun.reflect.generics.reflectiveObjects.NotImplementedException();
+        throw new NotImplementedException();
     }
-}
