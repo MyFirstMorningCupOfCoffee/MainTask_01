@@ -128,7 +128,6 @@ public class Vector
      * @param value the value that will be added to Vector's storage's end */
     public void add(double value)
     {
-        System.out.println(java.util.Arrays.toString(storage));
         if(length == storage.length)
         {
             increaseSize();
@@ -137,12 +136,11 @@ public class Vector
             storage[length] = value;
             length++;
             sorted = false;
-            System.out.println(java.util.Arrays.toString(storage));
     }
     
     /** 
      * Adds new element to storage.<br>
- DOES NOT increase inner storage size or change sorted property.
+     DOES NOT increase inner storage size or change sorted property.
      * Is used inside other "add" methods, which ones should do this job.
      * Thus we can avoid doing extra useless actions during multiple 
      * elements inserts */
