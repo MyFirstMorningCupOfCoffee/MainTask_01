@@ -2,10 +2,10 @@ package by.epam.javatraining.rassolko.maintask01.model.entity;
 
 public class Matrix 
 {
-    double[][] storage;
+    private double[][] storage;
     
-    int rowQuantity;
-    int columnQuantity;
+    private int rowQuantity;
+    private int columnQuantity;
     
     /**
      * Constructor that creates empty Matrix of given size
@@ -31,6 +31,12 @@ public class Matrix
      * @param arr - array that needs to be used as Matrix source */
     Matrix(double[][] arr)
     {
+        // Checks if given array is a valid matrix.
+        // If it is - creates matrix with proper rows and columns quantity and copy data.
+        // If it isn't - creates empty matrix that can contain all values from
+        // given array and copy data.
+        // If given array is complitely broken - matrix will have 0*0 size
+        
         int rowQuantity = 0;
         int columnQuantity = 0;
         
@@ -64,9 +70,9 @@ public class Matrix
      * @param source Matrix to be copied */
     Matrix(Matrix source)
     {
-        columnQuantity = source.columnQuantity;
-        rowQuantity = source.rowQuantity;
-        storage = new double[rowQuantity][columnQuantity];
+        this.columnQuantity = source.columnQuantity;
+        this.rowQuantity = source.rowQuantity;
+        storage = new double[source.rowQuantity][source.columnQuantity];
         
         for(int row = 0; row < rowQuantity; row++)
         {
@@ -76,7 +82,6 @@ public class Matrix
             }
         }
     }
-    
     
     /**
      * @param row current Matrix row index starting from 0
@@ -132,7 +137,7 @@ public class Matrix
      * Creates empty Matrix that guaranteed contains all values
      * from the array sent in parameters. In case if that array has second level 
      * arrays with various lengths, extra cells in Matrix will be filled with "0".
-     * If given array is complitely broken - matrix will have 0*0 size.
+     * If given array is complitely broken - matrix will have 0*0 size
      * @param arr - array that needs to be used as Matrix source */
     public void set(double[][] arr)
     { 
@@ -163,10 +168,10 @@ public class Matrix
             }
         } 
     }
-   
+    
     /**
-     * Creates copy of Matrix in form of array. If actions upon this array need
-     * to act on this Matrix - after these actions the array must be returned 
+     * Creates copy of Matrix in form of array. If actions with this array need
+     * to act on this Matrix - after thses actions the array must be returned 
      * to Matrix using method <b>set(double[][] arr)</b>
      * @return array representation of this object */
     public double[][] toArray()
@@ -175,6 +180,8 @@ public class Matrix
         System.arraycopy(storage, 0, responce, 0, storage.length);
         return responce;
     }
+    
+    
     
     /** 
      * Transpose Matrix x*y
