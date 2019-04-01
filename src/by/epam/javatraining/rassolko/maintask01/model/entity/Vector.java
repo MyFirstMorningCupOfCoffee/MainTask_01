@@ -2,6 +2,9 @@ package by.epam.javatraining.rassolko.maintask01.model.entity;
 
 public class Vector
 {
+    private final static int STORAGE_INCREASE_VALUE = 10;
+    
+    
     private double[] storage;
     private int length;
     private boolean sorted;
@@ -139,7 +142,7 @@ public class Vector
     
     /** 
      * Adds new element to storage.<br>
-     * DOES NOT increase inner storage size or change sorted property.
+ DOES NOT increase inner storage size or change sorted property.
      * Is used inside other "add" methods, which ones should do this job.
      * Thus we can avoid doing extra useless actions during multiple 
      * elements inserts */
@@ -168,10 +171,10 @@ public class Vector
     }
     
     /** 
-     * Adds default value slots (10) to inner storage */
+     * Adds DEFAULT_VALUE slots to inner storage */
     private void increaseSize()
     {
-        increaseSize(10);
+        increaseSize(STORAGE_INCREASE_VALUE);
     }
     
     /** 
@@ -196,17 +199,17 @@ public class Vector
         // and bynary search simply doesn't work for unsorted arrays
         if(sorted && length > 4)
         {
-            return search_bynary(elem);
+            return searchBynary(elem);
         }
         
-        return search_linear(elem);
+        return searchLinear(elem);
     }
     
     /**
      * Linear search for not sorted Vector.
      * @param elem the element that needs to be found
      * @return element's position or -1 in case if proper value is missing. */
-    private int search_linear(double elem)
+    private int searchLinear(double elem)
     {
         for(int i = 0; i < this.length; i++)
         {
@@ -223,7 +226,7 @@ public class Vector
      * Bynary search for Vector that marked as "Sorted".
      * @param elem the element that needs to be found
      * @return element's position or -1 in case if proper value is missing. */
-    private int search_bynary(double elem)
+    private int searchBynary(double elem)
     {
         // in case all elements in our vector are equal
         if(storage[0] == storage[length - 1])
@@ -275,15 +278,13 @@ public class Vector
             return -1;
         }
         
+    }
 
     public double[] asArray()
     {
         return storage;
     }
     
-    /**
-     * @return a string representation of the Vector.
-     */
     @Override
     public String toString()
     {
