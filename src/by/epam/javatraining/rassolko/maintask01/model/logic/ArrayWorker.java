@@ -2,12 +2,12 @@ package by.epam.javatraining.rassolko.maintask01.model.logic;
 
 public class ArraysWorker 
 {
-    private static final SortType DEFAULT_SORT_TYPE = SortType.SelectionSort;
+    private static final SortType DEFAULT_SORT_TYPE = SortType.MERGE_SORT;
     
     public static enum Order 
-        { Ascending, Descending };
+        { ASCENDING, DESCENDING };
     public static enum SortType 
-        { QuickSort, InsertionSort, BubbleSort, SelectionSort, MergeSort };
+        { QUICK_SORT, INSERTION_SORT, BUBBLE_SORT, SELECTION_SORT, MERGE_SORT };
     
         
     
@@ -35,7 +35,7 @@ public class ArraysWorker
      * @param array array to be sorted */
     public static void sort(double[] array)
     {
-        sort(array, Order.Ascending);
+        sort(array, Order.ASCENDING);
     }
     
     /** 
@@ -66,7 +66,7 @@ public class ArraysWorker
      * @param length length of subarray that must be sorted */
     public static void sort(double[] array, int from, int length)
     {
-        sort(array, from, length, Order.Ascending, DEFAULT_SORT_TYPE);
+        sort(array, from, length, Order.ASCENDING, DEFAULT_SORT_TYPE);
     }
     
     /** 
@@ -93,27 +93,27 @@ public class ArraysWorker
     {
         switch(sortType)
         {
-            case BubbleSort:
+            case BUBBLE_SORT:
             {
                 bubbleSort(array, from, length, order);
                 break;
             }
-            case InsertionSort:
+            case INSERTION_SORT:
             {
                 insertionSort(array, from, length, order);
                 break;
             }
-            case MergeSort:
+            case MERGE_SORT:
             {
                 mergeSort(array, from, length, order);
                 break;
             }
-            case SelectionSort:
+            case SELECTION_SORT:
             {
                 selectionSort(array, from, length, order);
                 break;
             }
-            case QuickSort:
+            case QUICK_SORT:
             {
                 quickSort(array, from, length, order);
                 break;
@@ -132,7 +132,7 @@ public class ArraysWorker
     // -- bubble sort -- //
     private static void bubbleSort(double[] array, int from, int length, Order order)
     {
-        if(order == Order.Descending)
+        if(order == Order.DESCENDING)
         {
             sortBubbleDesc(array, from, length);
         }
@@ -181,7 +181,7 @@ public class ArraysWorker
     // -- insertion sort -- //
     private static void insertionSort(double[] array, int from, int length, Order order)
     {
-        if(order == Order.Descending)
+        if(order == Order.DESCENDING)
         {
             sortInsertionDesc(array, from, length);
         }
@@ -232,7 +232,7 @@ public class ArraysWorker
     // -- selecton sort -- //
         private static void selectionSort(double[] array, int from, int length, Order order)
     {
-        if(order == Order.Descending)
+        if(order == Order.DESCENDING)
         {
             sortSelectionDesc(array, from, length);
         }
@@ -292,7 +292,7 @@ public class ArraysWorker
     // -- merge sort -- //
     private static void mergeSort(double[] array, int from, int length, Order order)
     {
-        if(order == Order.Descending)
+        if(order == Order.DESCENDING)
         {
             sortMergeDesc(array, from, length);
         }
@@ -408,7 +408,7 @@ public class ArraysWorker
     // -- quick sort -- //
     private static void quickSort(double[] array, int from, int length, Order order)
     {
-        if(order == Order.Descending)
+        if(order == Order.DESCENDING)
         {
             sortQuickDesc(array, from, length);
         }
